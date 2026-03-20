@@ -45,7 +45,7 @@
     padding: 10px;
     background: rgba(0,0,0,0.3);
     backdrop-filter: blur(5px);
-    color: white;
+    color: lightblue;
   }
 
   table { width: 100%; border-collapse: collapse; }
@@ -189,23 +189,30 @@
     let digits = angkaInput.split('');
     let output = [];
 
-    function permute(arr, k, prefix=[]) {
+    // permutasi dengan memperhatikan duplikat digit
+    function permute(arr, k, used = [], prefix = []) {
       if (prefix.length === k) {
         output.push(prefix.join(''));
         return;
       }
-      for (let i=0; i<arr.length; i++) {
-        if (!prefix.includes(arr[i])) {
-          prefix.push(arr[i]);
-          permute(arr, k, prefix);
-          prefix.pop();
-        }
+      for (let i = 0; i < arr.length; i++) {
+        if (used[i]) continue; // tiap posisi digit hanya dipakai sekali
+        used[i] = true;
+        prefix.push(arr[i]);
+        permute(arr, k, used, prefix);
+        prefix.pop();
+        used[i] = false;
       }
     }
 
     permute(digits, setInput);
 
+    // hapus duplikat hasil
+    output = [...new Set(output)];
+
+    // format dengan tanda *
     let formatted = output.join("*") + "*";
+
     hasil.innerHTML = `Input: ${angkaInput}<br>Set: ${setInput}D<br>Jumlah: ${output.length}<br><br>${formatted}`;
   }
   function ClearBbfs() {
