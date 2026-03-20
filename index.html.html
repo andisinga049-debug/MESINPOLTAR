@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>MESIN POLTAR</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    overflow: hidden;
+    color: blue;
+    /* Latar belakang GIF */
+    background: url('file:///C:/Users/ADMLIVE%20-%2017/Downloads/ular.gif') no-repeat center center fixed;
+    background-size: cover;
+  }
+  .container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: rgba(255,255,255,0.85); /* overlay transparan agar teks tetap jelas */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    color: black;
+    position: relative;
+    z-index: 10;
+  }
+  h2 { text-align: center; color: #333; }
+
+  /* Scroll area untuk hasil */
+  #hasil {
+    max-height: 400px;   /* tinggi maksimal area hasil */
+    overflow-y: auto;    /* aktifkan scroll vertikal */
+    margin-top: 15px;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 10px;
+    background: rgba(0,0,0,0.3); /* transparan gelap agar teks tetap terbaca */
+    backdrop-filter: blur(5px);  /* efek kaca bening */
+    color: white;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent; /* tabel transparan */
+  }
+  th, td {
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 6px;
+    text-align: center;
+    background: rgba(255,255,255,0.1); /* isi sel semi transparan */
+    color: white;
+  }
+  th {
+    background: rgba(76,175,80,0.6); /* hijau transparan untuk header */
+    color: #fff;
+  }
+  tr:nth-child(even) td {
+    background: rgba(255,255,255,0.05); /* baris genap lebih tipis */
+  }
+  .total { margin-top: 10px; font-weight: bold; color: yellow; }
+
+  /* Efek meteor jatuh lurus */
+  .meteor {
+    position: absolute;
+    width: 4px;
+    height: 80px;
+    background: linear-gradient(to bottom, #fff, #ffcc00, transparent);
+    border-radius: 50%;
+    top: -100px;
+    opacity: 0.8;
+    animation: fall linear forwards;
+  }
+  .meteor::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 100px;
+    background: rgba(255, 100, 0, 0.6);
+    filter: blur(5px);
+    border-radius: 50%;
+    top: 0;
+    left: -1px;
+  }
+  @keyframes fall {
+    0% { transform: translateY(-100px); opacity: 1; }
+    70% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+  }
+
+  /* Efek bintang jatuh dari mouse */
+  .star {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: yellow;
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 0 10px yellow, 0 0 20px orange;
+    animation: starFall 1s linear forwards;
+  }
+  @keyframes starFall {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(100px) scale(0); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>MESIN POLTAR</h2>
+    <label>
+      Angka Tarung Dalam:
+      <input type="text" id="angka" placeholder="Contoh: 125,456,850 atau 1327,8501,4750,8569">
+    </label>
+    <input onclick="GenerateCustom()" type="button" value="Generate">
+    <input onclick="ClearAll()" type="button" value="Bersihkan">
+    <div id="hasil">Hasil kombinasi akan muncul di sini...</div>
+  </div>
+
+  <script>
+    function GenerateCustom() {
+      const angkaInput = document.getElementById('angka').value;
+      const hasil = document.getElementById('hasil');
+      const blokArr = angkaInput.split(',').map(a => a.trim()).filter(a => a);
+
+      if (blokArr.length < 2) {
+        hasil.innerHTML = "Minimal masukkan 2 blok angka, contoh: 125,456,850";
+        return;
+      }
+
+      let output = [];
+      function combineRecursive(bloks, pos = 0, prefix = "") {
+        if (pos === bloks.length) {
+          output.push(prefix);
+          return;
+        }
+        for (let i = 0; i < bloks[pos].length; i++) {
+          combineRecursive(bloks, pos + 1, prefix + bloks[pos][i]);
+        }
+      }
+      combineRecursive(blokArr);
+      output = [...new Set(output)];
+
+      let tableHTML = `
+        <strong>Input:</strong> ${angkaInput}<br>
+        <strong>Kombinasi:</strong><br>
+        <table>
+          <tr><th>No</th><th>Kombinasi</th></tr>
+      `;
+      output.forEach((komb, idx) => {
+        tableHTML += `<tr><td>${idx + 1}</td><td>${komb}</td></tr>`;
+      });
+      tableHTML += `</table><div class="total">Total Kombinasi: ${output.length}</div>`;
+      hasil.innerHTML = tableHTML;
+    }
+
+    function ClearAll() {
+      document.getElementById('angka').value = '';
+      document.getElementById('hasil').innerHTML = 'Hasil kombinasi akan muncul di sini...';
+    }
+
+    // Efek meteor jatuh lurus
+    function createMeteor() {
+      const meteor = document.createElement('div');
+      meteor.classList.add('meteor');
+      meteor.style.left = Math.random() * window.innerWidth + 'px';
+      meteor.style.animationDuration = (Math.random() * 2 + 1) + 's';
+      document.body.appendChild(meteor);
+      setTimeout(() => meteor.remove(), 3000);
+    }
+    setInterval(createMeteor, 30);
+
+    // Efek bintang jatuh dari mouse
+    document.addEventListener('mousemove', function(e) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = e.pageX + 'px';
+      star.style.top = e.pageY + 'px';
+      document.body.appendChild(star);
+      setTimeout(() => { star.remove(); }, 2000);
+    });
+  </script>
+</body>
+</html>
