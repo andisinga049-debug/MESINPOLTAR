@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <title>MESIN POLTAR & BBFS</title>
 <style>
-  body { font-family: Arial, sans-serif; background: #000; color: #fff; text-align: center; }
+  body {background-image: url(langitmalam.png)}
+  { font-family: Arial, sans-serif; background: #000; color: #fff; text-align: center; }
     .container { max-width: 800px; margin: 40px auto; background: rgba(255,255,255,0.2); padding: 20px; border-radius: 8px; }
     input { margin: 5px; padding: 5px; }
     #hasil {
@@ -112,17 +113,17 @@
       <h2>MESIN POLTAR</h2>
       <label>
         Angka Tarung Dalam:
-        <input type="text" id="angkaPoltar" placeholder="Contoh: 125,456,850">
+        <input type="text" id="angkaPoltar" placeholder="Contoh: xxx,xxx,xxx">
       </label>
       <input onclick="GeneratePoltar()" type="button" value="Generate">
       <input onclick="ClearPoltar()" type="button" value="Bersihkan">
-      <div id="hasilPoltar">Hasil kombinasi akan muncul di sini...</div>
+      <div id="hasilPoltar">silahkan generate angka...</div>
     </div>
 
     <!-- BBFS -->
     <div class="box">
       <h2>MESIN BBFS</h2>
-      <label>Angka Tarung Dalam:</label>
+      <label>Isi Angka BBFS:</label>
       <input type="text" id="angkaBbfs" placeholder="Contoh: 123679"><br>
       <label>Set 4D,3D,2D : Ketik 4 / 3 / 2</label>
       <input type="text" id="setBbfs" placeholder="Contoh: 4"><br>
@@ -232,11 +233,11 @@
     const meteor = document.createElement('div');
     meteor.classList.add('meteor');
     meteor.style.left = Math.random() * window.innerWidth + 'px';
-    meteor.style.animationDuration = (Math.random() * 2 + 1) + 's';
+    meteor.style.animationDuration = (Math.random() * 1 + 1) + 's';
     document.body.appendChild(meteor);
-    setTimeout(() => meteor.remove(), 2000);
+    setTimeout(() => meteor.remove(), 5000);
   }
-  setInterval(createMeteor, 20); // tiap 0.5 detik
+  setInterval(createMeteor, 0.5); // tiap 0.5 detik
 
   /* Efek bintang mouse */
   document.addEventListener('mousemove', function(e) {
@@ -245,6 +246,6 @@
     star.style.left = e.pageX + 'px';
     star.style.top = e.pageY + 'px';
     document.body.appendChild(star);
-    setTimeout(() => { star.remove(); }, 3000);
+    setTimeout(() => { star.remove(); }, 5000);
   });
   </script>
